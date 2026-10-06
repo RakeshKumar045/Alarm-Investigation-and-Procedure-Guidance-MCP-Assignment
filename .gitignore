@@ -1,0 +1,8 @@
+.venv/
+.rak1venv/
+__pycache__/
+.pytest_cache/
+.env
+*.pyc
+.streamlit/
+rag/index/
