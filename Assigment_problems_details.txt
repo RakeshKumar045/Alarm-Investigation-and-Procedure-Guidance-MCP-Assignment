@@ -1,0 +1,2210 @@
+1) Assignment_Use_Case.md
+
+# Senior Software Engineer – Copilot Integration Assignment
+
+## Alarm Investigation and Procedure Guidance Copilot
+
+> **This is your assigned use case.** Implement it completely.
+
+---
+
+## 1. Objective
+
+This assignment evaluates the candidate’s ability to design and implement a production-oriented copilot application that integrates with enterprise source systems.
+
+The candidate is expected to demonstrate:
+
+- Strong software architecture and design decisions
+- Deep API and source-system integration knowledge
+- MCP server development and MCP client integration
+- Document ingestion and Retrieval-Augmented Generation
+- Reliable orchestration across multiple tools and data sources
+- A usable graphical interface
+- Test-driven development
+- Secure configuration and operational readiness
+- Clear packaging, documentation, and deployment instructions
+
+The candidate must build an **Alarm Management API simulator** as the backend source system that the MCP server connects to. The `postman/` folder in this package contains Postman collections that serve as the reference API specification — they define every endpoint, request schema, response structure, authentication header, trace header, and chaining flow the simulator must honour. The candidate should use those collections to implement and validate their simulator before wiring it to the MCP server.
+
+The required API surface includes asset search, asset metadata, alarm retrieval, alarm summaries, trends, correlation, flood analysis, rationalization candidates, priority scoring, operator recommendations, KPI calculation, authentication, trace metadata propagation, pagination, and multi-step API chaining.
+
+---
+
+## 2. Mandatory Technical Scope
+
+The following components are mandatory for every submission, irrespective of the selected business use case.
+
+### 2.1 Mandatory MCP Server Development
+
+The candidate must develop at least one working MCP server.
+
+The MCP server must:
+
+- Expose selected Alarm Management API capabilities as MCP tools
+- Provide meaningful tool names and descriptions
+- Define typed input and output schemas
+- Validate tool inputs
+- Handle authentication and configuration
+- Map external API errors into understandable MCP errors
+- Support timeout and retry handling
+- Propagate correlation or trace metadata
+- Avoid exposing secrets in logs or responses
+- Be independently runnable and testable
+
+At minimum, the MCP server should expose tools for:
+
+- Asset search
+- Alarm retrieval
+- Alarm summary or trend analysis
+- One advanced operation such as correlation, rationalization, priority scoring, recommendations, or KPI calculation
+
+The candidate may expose additional systems through the same MCP server or through a second MCP server.
+
+### 2.2 Mandatory MCP Client Integration
+
+The copilot application must connect to and invoke the developed MCP server.
+
+The implementation must demonstrate:
+
+- Tool discovery
+- Schema-aware tool invocation
+- Multi-step tool chaining
+- Passing outputs from one MCP tool into another
+- Handling invalid tool inputs
+- Handling unavailable tools
+- Handling partial failures
+- Displaying MCP execution details in the GUI
+
+Direct API calls may be used internally by the MCP server, but the copilot orchestration layer must use MCP for the Alarm Management API integration.
+
+### 2.3 Mandatory Document RAG Capability
+
+Every solution must include a document-based RAG workflow.
+
+The candidate must provide a small document corpus relevant to the selected use case, such as:
+
+- Operating procedures
+- Troubleshooting manuals
+- Alarm philosophy documents
+- Maintenance guides
+- Safety instructions
+- Service knowledge articles
+- Ticket resolution notes
+- Engineering standards
+
+The RAG implementation must include:
+
+- Document ingestion
+- Text extraction
+- Chunking
+- Metadata capture
+- Embedding generation or an equivalent retrieval approach
+- Vector or hybrid retrieval
+- Retrieval filtering
+- Source citations
+- Grounded answer generation
+- Handling of no-result or low-confidence retrieval
+- Protection against prompt instructions embedded inside retrieved documents
+
+The GUI must show the document sources used to produce the answer.
+
+### 2.4 Mandatory Combined Workflow
+
+At least one end-to-end scenario must combine:
+
+1. Natural-language request
+2. MCP tool discovery and execution
+3. Alarm Management API data
+4. Document retrieval through RAG
+5. Multi-step orchestration
+6. A grounded answer with evidence
+7. GUI presentation
+8. Tool and source traceability
+
+A solution that implements MCP and RAG as unrelated demonstrations will not be considered complete. They must participate in the same business workflow.
+
+---
+
+## 3. Candidate Assignment
+
+The candidate should implement **one primary use case completely**.
+
+The completed solution should:
+
+1. Accept natural-language requests.
+2. Identify the correct intent.
+3. Discover and invoke MCP tools.
+4. Perform multi-step tool chaining.
+5. Retrieve relevant document evidence through RAG.
+6. Combine structured and unstructured information.
+7. Present the result through a usable GUI.
+8. Show source evidence, tool traceability, and failure handling.
+9. Include automated tests and repeatable packaging.
+
+The implementation should not be a hard-coded sequence for only the sample questions.
+
+---
+
+## 4. Your Assigned Use Case — Alarm Investigation and Procedure Guidance Copilot
+
+### Business Scenario
+
+Operators and reliability engineers need to investigate alarms by correlating asset metadata, active alarms, historical patterns, related assets, recommended actions, and operating procedures.
+
+Build a copilot that performs an evidence-backed alarm investigation using MCP tools and document RAG.
+
+### Example Questions
+
+- Show active critical alarms for Boiler Feed Pump 102 and recommend immediate actions.
+- Why are compressor discharge pressure alarms repeatedly occurring?
+- Which alarm has the highest priority in EastRefinery, and why?
+- What related assets should be inspected for this motor trip alarm?
+- Which operating procedure applies to this alarm?
+- Are the API recommendations consistent with the maintenance manual?
+
+### Required Integrations
+
+#### MCP server
+
+Expose relevant Alarm Management API operations:
+
+- Asset search
+- Alarm retrieval
+- Asset metadata
+- Alarm correlation
+- Priority scoring
+- Operator recommendations
+
+#### Document RAG
+
+Ingest and retrieve from:
+
+- Operating procedures
+- Maintenance manuals
+- Troubleshooting guides
+- Safety instructions
+
+### Expected Workflow
+
+1. Discover the available MCP tools.
+2. Resolve the asset name to an asset identifier.
+3. Retrieve active or historical alarms through MCP.
+4. Fetch asset metadata and related assets.
+5. Run correlation or priority scoring.
+6. Retrieve relevant document passages using RAG.
+7. Compare API recommendations with document guidance.
+8. Produce a grounded answer with citations and tool trace.
+
+### GUI Expectations
+
+- Chat interface
+- Alarm summary panel
+- Likely causes and recommendations
+- Document citations
+- Expandable MCP tool-call trace
+- Raw request and response inspection
+- Error and retry visibility
+
+---
+
+## 5. Minimum Functional Requirements
+
+### Copilot
+
+- Natural-language input
+- Intent detection or planning
+- MCP tool discovery
+- Multi-step MCP orchestration
+- Context retention
+- Structured final responses
+- Source citations
+- Graceful handling of incomplete information
+
+### MCP
+
+- At least one candidate-developed MCP server
+- MCP client integration
+- Typed schemas
+- Tool validation
+- Authentication handling
+- Timeout and retry behavior
+- Tool error mapping
+- Trace metadata
+- Automated MCP tests
+
+### RAG
+
+- Document ingestion
+- Chunking and metadata
+- Retrieval index
+- Grounded generation
+- Citations
+- Low-confidence handling
+- Prompt-injection considerations
+- Retrieval tests
+
+### GUI
+
+The GUI may use React, Angular, Vue, Streamlit, Gradio, or another appropriate framework.
+
+It must provide:
+
+- Chat interaction
+- Structured results
+- MCP execution visibility
+- RAG citations
+- Loading, error, and empty states
+- Configuration through environment variables
+- Responsive presentation
+
+### Tests
+
+At minimum:
+
+- Unit tests
+- MCP server tool tests
+- MCP client integration tests
+- RAG ingestion and retrieval tests
+- Orchestration tests
+- API client tests
+- Error-path tests
+- One end-to-end test combining MCP and RAG
+
+---
+
+## 6. Architecture Expectations
+
+The architecture must clearly separate:
+
+- User interface
+- Copilot orchestration layer
+- MCP client or tool registry
+- Candidate-developed MCP server
+- API and source-system connectors
+- RAG ingestion pipeline
+- Retrieval service
+- Domain models
+- Authentication and configuration
+- Observability
+- Persistence, where used
+
+The submission must include an architecture diagram that explicitly shows both the MCP and RAG paths.
+
+---
+
+## 7. Mandatory End-to-End Acceptance Scenario
+
+The candidate must demonstrate at least one scenario similar to:
+
+> Investigate recurring high-severity alarms for Boiler Feed Pump 101 over the last 90 days, identify likely contributing factors, retrieve the relevant operating procedure, and provide recommended actions with source evidence.
+
+The scenario should show:
+
+1. Asset resolution through an MCP tool
+2. Multi-step Alarm Management API chaining through MCP
+3. Document retrieval through RAG
+4. Combined reasoning
+5. Citations
+6. GUI output
+7. MCP execution trace
+8. Automated end-to-end test evidence
+
+---
+
+## 8. Deliverables
+
+The GitHub repository must contain:
+
+1. Copilot source code
+2. Candidate-developed MCP server source code
+3. MCP client integration
+4. RAG ingestion pipeline
+5. Sample document corpus
+6. Retrieval index creation instructions
+7. GUI source code
+8. README
+9. Architecture document
+10. Architecture diagram showing MCP and RAG
+11. API integration documentation
+12. MCP tool catalog
+13. Test suite
+14. Sample environment file
+15. Dockerfile
+16. Docker Compose or equivalent
+17. Demo screenshots or recording
+18. Coverage report
+19. Known limitations
+20. Future improvements
+21. A demo video of up to 10 minutes showcasing the working solution
+
+---
+
+## 9. Suggested Time Box
+
+Recommended time box: **10 to 14 hours**.
+
+The candidate should prioritize:
+
+- One complete vertical slice
+- Working MCP server and MCP client integration
+- Working document RAG
+- Clean architecture
+- Automated tests
+- Repeatable packaging
+
+A smaller, fully integrated MCP-plus-RAG solution is preferred over a broad but incomplete implementation.
+
+
+
+2) README.md
+
+
+# Assignment Package — Alarm Investigation and Procedure Guidance Copilot
+
+Welcome. This folder is your complete, self-contained assignment package for the
+**Senior Software Engineer – Copilot Integration** assignment. Your assigned use case is
+**Alarm Investigation and Procedure Guidance Copilot**.
+
+## What is in this folder
+
+| File / folder | Description |
+| --- | --- |
+| `Assignment_Use_Case.md` | The full assignment brief. Contains the objective, the mandatory technical scope (MCP server, MCP client, document RAG, combined workflow), your assigned use case, minimum functional requirements, architecture expectations, the mandatory end-to-end acceptance scenario, deliverables, and the suggested time box. **Start here.** |
+| `Submission_and_Evaluation_Guidelines.md` | How to submit your work: GitHub repository structure, README requirements, MCP and RAG documentation, packaging, CI, and security expectations. Also contains the evaluation scoring framework, red flags, and the submission message template. Includes the requirement to upload a demo video of up to 10 minutes. |
+| `postman/` | Reference Postman collections for the Alarm Management API. Use these as the specification to build your own simulator backend — the MCP server must connect to that simulator. Includes `Alarm-API-Simulator.postman_collection.json` (full E2E baseline), `scenarios/` (scenario-focused tests), and `chaining/` (ten multi-step chaining flows). |
+
+## How to get started
+
+1. Read `Assignment_Use_Case.md` end to end.
+2. Read `Submission_and_Evaluation_Guidelines.md` to understand submission and scoring.
+3. Implement the Alarm Management API simulator using the Postman collections in `postman/` as the API contract specification.
+4. Build one complete vertical slice: MCP server + MCP client + document RAG + GUI, integrated in a single workflow.
+5. Record a demo video of up to 10 minutes and link it in your repository README.
+
+## Key reminders
+
+- The copilot must call the Alarm Management API **through your MCP server**, not directly.
+- MCP and RAG must participate in the **same** business workflow, not as separate demonstrations.
+- Answers must include **source citations** and an **MCP execution trace**.
+- Do not commit secrets. Provide a `.env.example`.
+- Include automated tests and repeatable packaging (`docker compose up --build`).
+- Suggested time box: 10 to 14 hours.
+
+
+
+3)  Submission_and_Evaluation_Guidelines.md
+
+# GitHub Submission and Evaluation Guidelines
+
+## 1. Mandatory Submission Scope
+
+Every submission must include:
+
+- A working copilot application
+- A candidate-developed MCP server
+- MCP client integration in the copilot
+- A document ingestion and RAG workflow
+- A GUI
+- Automated tests
+- Repeatable local packaging
+- A demo video of up to 10 minutes showcasing the working solution
+
+MCP development and document RAG are mandatory and must participate in the same end-to-end workflow.
+
+A submission will be considered incomplete when:
+
+- The MCP server is only a stub
+- The copilot bypasses MCP and calls the Alarm Management API directly
+- RAG is implemented only as a disconnected sample
+- Document citations are missing
+- MCP and RAG are not demonstrated together
+
+## 2. Repository Submission
+
+Create a GitHub repository and share the link for evaluation.
+
+The repository may be public or private with evaluator access granted.
+
+Recommended name:
+
+```text
+senior-copilot-mcp-rag-assignment
+```
+
+## 3. Required Repository Structure
+
+```text
+.
+├── README.md
+├── docs/
+│   ├── architecture.md
+│   ├── architecture-diagram.png
+│   ├── mcp-tool-catalog.md
+│   ├── rag-design.md
+│   ├── api-integration.md
+│   ├── design-decisions.md
+│   └── known-limitations.md
+├── apps/
+│   ├── backend/
+│   └── frontend/
+├── mcp-servers/
+│   ├── alarm-management/
+│   └── optional-secondary-server/
+├── rag/
+│   ├── ingestion/
+│   ├── retrieval/
+│   ├── documents/
+│   └── tests/
+├── connectors/
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   └── e2e/
+├── test-data/
+├── scripts/
+├── .github/workflows/ci.yml
+├── .env.example
+├── .gitignore
+├── Dockerfile
+├── docker-compose.yml
+├── Makefile
+└── LICENSE
+```
+
+Equivalent structures are acceptable when clearly documented.
+
+## 4. README Requirements
+
+The root README must include:
+
+- Selected use case
+- Main capabilities
+- Technology stack
+- MCP server description
+- MCP tool list
+- RAG corpus and ingestion approach
+- Quick-start instructions
+- Configuration
+- Build and run commands
+- Test commands
+- Sample interactions
+- Architecture summary
+- Assumptions
+- Known limitations
+
+## 5. Mandatory MCP Documentation
+
+Include `docs/mcp-tool-catalog.md`.
+
+For every MCP tool, document:
+
+- Tool name
+- Purpose
+- Input schema
+- Output schema
+- Authentication behavior
+- Underlying source-system operation
+- Error behavior
+- Timeout behavior
+- Example invocation
+- Example response
+
+The README must explain how to start the MCP server independently.
+
+## 6. Mandatory MCP Engineering Requirements
+
+The MCP implementation should demonstrate:
+
+- Tool discovery
+- Typed contracts
+- Input validation
+- Output validation
+- Configuration management
+- Authentication propagation
+- Correlation and trace metadata
+- Pagination handling
+- Timeout handling
+- Retry behavior
+- API error mapping
+- Structured logging
+- Safe secret handling
+
+The copilot orchestration layer must invoke the Alarm Management API through the MCP server.
+
+## 7. Mandatory RAG Documentation
+
+Include `docs/rag-design.md`.
+
+Document:
+
+- Source document types
+- Ingestion flow
+- Text extraction
+- Chunking strategy
+- Chunk metadata
+- Embedding model or retrieval method
+- Vector database or index
+- Hybrid search, when used
+- Ranking or reranking
+- Retrieval filters
+- Citation construction
+- Low-confidence handling
+- Prompt-injection protections
+- Index refresh process
+
+## 8. Mandatory RAG Repository Content
+
+The repository must include:
+
+- A representative sample document corpus
+- An ingestion command or script
+- Index creation instructions
+- Retrieval tests
+- Example retrieved chunks
+- Document metadata
+- Citation examples
+
+Large or restricted documents should not be committed. In such cases, provide synthetic or public sample documents with the same expected structure.
+
+## 9. Architecture Documentation
+
+The architecture diagram must show:
+
+- GUI
+- Copilot orchestration
+- MCP client
+- MCP server
+- Alarm Management API
+- Optional secondary source
+- RAG ingestion pipeline
+- Retrieval index
+- Document store
+- Observability
+- Authentication boundaries
+
+The architecture document should explain the complete request flow from user prompt to final grounded answer.
+
+## 10. Configuration and Secrets
+
+Do not commit:
+
+- API keys
+- Access tokens
+- Database passwords
+- Cloud credentials
+- Certificates
+
+Provide `.env.example`.
+
+Example:
+
+```text
+ALARM_API_BASE_URL=http://alarm-api:8000
+ALARM_API_TOKEN=replace-me
+MCP_SERVER_URL=http://alarm-mcp:9000
+LLM_PROVIDER=replace-me
+LLM_API_KEY=replace-me
+VECTOR_STORE_URL=replace-me
+DOCUMENT_PATH=./rag/documents
+TICKETING_API_URL=replace-me
+```
+
+## 11. Branching and Commit Expectations
+
+Use meaningful commits.
+
+Examples:
+
+```text
+feat: add alarm management mcp server
+feat: add document ingestion pipeline
+feat: add rag retrieval with citations
+test: add mcp tool contract tests
+test: add end-to-end mcp and rag scenario
+docs: document architecture and tool catalog
+```
+
+At least one pull request is expected.
+
+## 12. Pull Request Expectations
+
+The pull request should contain:
+
+- Summary
+- Scope
+- Architecture changes
+- MCP tools added
+- RAG workflow added
+- Screenshots
+- Test evidence
+- Design decisions
+- Known limitations
+- Review checklist
+
+## 13. Test-Driven Development Expectations
+
+### Unit tests
+
+- Payload construction
+- Input validation
+- Response parsing
+- Tool selection
+- Citation formatting
+- Retrieval filtering
+
+### MCP server tests
+
+- Tool registration
+- Tool discovery
+- Schema validation
+- Authentication headers
+- Pagination
+- Timeouts
+- Retries
+- API error mapping
+- Trace propagation
+
+### MCP client tests
+
+- Server connectivity
+- Tool discovery
+- Tool invocation
+- Invalid arguments
+- Missing tools
+- Partial failure
+
+### RAG tests
+
+- Document ingestion
+- Chunking
+- Metadata capture
+- Retrieval relevance
+- Citation correctness
+- No-result behavior
+- Prompt-injection handling
+
+### Orchestration tests
+
+- Multi-step MCP chains
+- MCP output passed into subsequent tools
+- RAG retrieval within the same workflow
+- Combined answer generation
+- Partial source failure
+- Conflicting evidence
+
+### End-to-end test
+
+At least one automated scenario must combine:
+
+- GUI or backend request
+- MCP server invocation
+- Alarm Management API
+- RAG retrieval
+- Grounded response with citations
+
+## 14. Packaging Requirements
+
+Preferred startup:
+
+```text
+docker compose up --build
+```
+
+Docker Compose should start, as applicable:
+
+- Alarm Management API
+- MCP server
+- Copilot backend
+- GUI
+- Vector database or retrieval service
+- Optional database or ticketing mock
+
+Provide health checks and service dependency ordering.
+
+## 15. Continuous Integration
+
+GitHub Actions should run:
+
+- Formatting
+- Linting
+- Static analysis
+- Unit tests
+- MCP tests
+- RAG tests
+- Integration tests
+- Build validation
+- Security or dependency checks where practical
+
+## 16. Observability
+
+Preferred fields:
+
+- Request ID
+- Conversation ID
+- Trace ID
+- MCP server
+- MCP tool
+- Tool duration
+- Tool outcome
+- API status code
+- Retry count
+- Retrieval query
+- Retrieved document identifiers
+- Retrieval score
+- LLM latency
+
+Logs must not expose secrets or complete sensitive documents.
+
+## 17. Security Expectations
+
+Address:
+
+- Secret management
+- MCP tool authorization
+- Input validation
+- Output encoding
+- Prompt injection
+- Retrieved-document trust boundaries
+- SQL injection prevention
+- Write-operation approval
+- Tool misuse
+- Dependency risk
+
+Ticket or issue creation must require explicit confirmation.
+
+## 18. Demo Evidence
+
+Include:
+
+- A demo video of up to 10 minutes that showcases the work done, uploaded and linked in the README
+- Screenshots or short recording
+- MCP tool-discovery view
+- MCP execution trace
+- RAG citations
+- One successful scenario
+- One failure or degraded scenario
+
+The 10-minute demo video should walk through the end-to-end workflow, including MCP tool discovery and execution, RAG citations, and at least one successful and one failure or degraded scenario. Upload it to an accessible location (for example, the repository release assets, a shared drive, or a video platform) and link it from the README.
+
+## 19. Repository Sharing Checklist
+
+Confirm:
+
+- Repository is accessible
+- MCP server runs independently
+- Copilot connects through MCP
+- Sample documents are present
+- RAG ingestion succeeds
+- Citations are visible
+- Combined MCP-plus-RAG scenario works
+- Setup works from a clean environment
+- No secrets are committed
+- Tests pass
+- Architecture diagram is included
+- GitHub Actions status is visible
+- Evaluator access is granted
+- A demo video of up to 10 minutes is uploaded and linked
+
+## 20. Submission Message Template
+
+```text
+Subject: Senior Software Engineer Copilot Assignment Submission
+
+Repository:
+<GitHub repository URL>
+
+Selected use case:
+<Use case name>
+
+MCP server:
+<Brief description and start command>
+
+Document RAG:
+<Corpus, ingestion command, and retrieval approach>
+
+Run instructions:
+<Primary command>
+
+Test instructions:
+<Primary command>
+
+Demo:
+<Location of screenshots or recording>
+
+Demo video (up to 10 minutes):
+<Link to uploaded video>
+
+Known limitations:
+<Brief list>
+
+Estimated implementation time:
+<Hours>
+```
+
+# Evaluation Framework
+
+## 21. Scoring Summary
+
+| Area | Weight |
+|---|---:|
+| Architecture and design | 20% |
+| MCP server development and integration | 20% |
+| Document RAG implementation | 15% |
+| Approach and completeness | 15% |
+| Test-driven development and code quality | 20% |
+| Packaging, documentation, and operability | 10% |
+
+## 22. Architecture and Design – 20%
+
+Evaluate:
+
+- Separation of concerns
+- MCP boundaries
+- RAG boundaries
+- Reusable connectors
+- Typed contracts
+- Replaceable LLM provider
+- Security boundaries
+- Observability
+- Maintainability
+
+## 23. MCP Server Development and Integration – 20%
+
+Evaluate:
+
+- Actual server implementation
+- Quality of tool contracts
+- Tool discovery
+- Schema validation
+- Authentication
+- Error handling
+- Pagination
+- Retry and timeout behavior
+- Trace propagation
+- Multi-step chaining
+- GUI visibility
+
+## 24. Document RAG Implementation – 15%
+
+Evaluate:
+
+- Ingestion design
+- Chunking
+- Metadata
+- Retrieval quality
+- Citations
+- Grounding
+- Low-confidence handling
+- Prompt-injection considerations
+- Reproducibility
+
+## 25. Approach and Completeness – 15%
+
+Evaluate:
+
+- Problem decomposition
+- Correct tool selection
+- MCP and RAG used together
+- Functional GUI
+- Evidence-backed output
+- Error handling
+- Representative business flow
+
+## 26. Test-Driven Development and Code Quality – 20%
+
+Evaluate:
+
+- Unit tests
+- MCP contract tests
+- RAG tests
+- Orchestration tests
+- Error-path tests
+- End-to-end tests
+- CI
+- Code readability
+- Static analysis
+
+## 27. Packaging, Documentation, and Operability – 10%
+
+Evaluate:
+
+- Clean setup
+- Repeatable build
+- Docker packaging
+- Environment configuration
+- Health checks
+- README quality
+- MCP tool catalog
+- RAG design document
+- Demo evidence
+- Repository hygiene
+
+## 28. Red Flags
+
+- MCP server is mocked without real tool execution
+- Copilot bypasses MCP
+- RAG is disconnected from the main use case
+- No source citations
+- Hard-coded answers
+- Secrets committed
+- No automated tests
+- Unsafe SQL
+- Write operations without approval
+- No error handling
+- Repository cannot run using documented steps
+
+
+
+4) postman/Alarm-API-Simulator.postman_collection.json
+
+{
+  "info": {
+    "name": "Alarm API Simulator E2E",
+    "description": "Postman collection for Alarm Management API Simulator with auth, trace headers, and chained variables.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "6f25f208-6f6f-4e31-9f11-5a3b7cc4f8f0"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{auth_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8000" },
+    { "key": "auth_token", "value": "demo-token" },
+    { "key": "trace_id", "value": "trace-postman-001" },
+    { "key": "x_client_id", "value": "postman-client" },
+    { "key": "x_metadata_tag", "value": "manual-test" },
+    { "key": "asset_name", "value": "Boiler Feed Pump 101" },
+    { "key": "asset_id", "value": "" },
+    { "key": "alarm_id", "value": "" },
+    { "key": "calculation_id", "value": "" },
+    { "key": "start_time", "value": "2026-05-01T00:00:00Z" },
+    { "key": "end_time", "value": "2026-07-01T00:00:00Z" }
+  ],
+  "item": [
+    {
+      "name": "00 - Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/health",
+        "auth": { "type": "noauth" }
+      }
+    },
+    {
+      "name": "01 - Search Asset (sets asset_id)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/assets/search?query={{asset_name}}&limit=10",
+          "host": ["{{baseUrl}}"],
+          "path": ["assets", "search"],
+          "query": [
+            { "key": "query", "value": "{{asset_name}}" },
+            { "key": "limit", "value": "10" }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "const body = pm.response.json();",
+              "pm.collectionVariables.set('asset_id', body.results[0].asset_id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Asset Metadata",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/assets/{{asset_id}}/metadata"
+      }
+    },
+    {
+      "name": "03 - Get Alarms (sets alarm_id)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/alarms?asset_id={{asset_id}}&page=1&page_size=50&sort_by=start_time&sort_order=desc",
+          "host": ["{{baseUrl}}"],
+          "path": ["alarms"],
+          "query": [
+            { "key": "asset_id", "value": "{{asset_id}}" },
+            { "key": "page", "value": "1" },
+            { "key": "page_size", "value": "50" },
+            { "key": "sort_by", "value": "start_time" },
+            { "key": "sort_order", "value": "desc" }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "const body = pm.response.json();",
+              "if (body.data && body.data.length > 0) { pm.collectionVariables.set('alarm_id', body.data[0].alarm_id); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Get Alarm by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/alarms/{{alarm_id}}"
+      }
+    },
+    {
+      "name": "05 - Alarm Summary (trace headers)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "trace_id", "value": "{{trace_id}}" },
+          { "key": "x-client-id", "value": "{{x_client_id}}" },
+          { "key": "x-metadata-tag", "value": "{{x_metadata_tag}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"asset_ids\": [\"{{asset_id}}\"],\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"severity\": [\"high\", \"critical\"],\n  \"group_by\": [\"alarm_name\"],\n  \"kpis\": [\"alarm_count\", \"recurring_rate\", \"avg_ack_delay\"]\n}"
+        },
+        "url": "{{baseUrl}}/alarms/summary"
+      }
+    },
+    {
+      "name": "06 - Alarm Trends",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"asset_ids\": [\"{{asset_id}}\"],\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"bucket\": \"daily\",\n  \"metrics\": [\"alarm_count\", \"avg_ack_delay\"]\n}"
+        },
+        "url": "{{baseUrl}}/alarms/trends"
+      }
+    },
+    {
+      "name": "07 - Alarm Correlation (trace headers)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "trace_id", "value": "{{trace_id}}" },
+          { "key": "x-client-id", "value": "{{x_client_id}}" },
+          { "key": "x-metadata-tag", "value": "{{x_metadata_tag}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"asset_ids\": [\"{{asset_id}}\"],\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"correlation_method\": \"cooccurrence\",\n  \"lag_window_minutes\": 15,\n  \"severity_threshold\": \"medium\",\n  \"min_support\": 1\n}"
+        },
+        "url": "{{baseUrl}}/alarms/correlation"
+      }
+    },
+    {
+      "name": "08 - Flood Analysis",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"unit\": \"Unit 2\",\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"threshold_count\": 10,\n  \"rolling_window_minutes\": 10\n}"
+        },
+        "url": "{{baseUrl}}/alarms/flood-analysis"
+      }
+    },
+    {
+      "name": "09 - Rationalization Candidates",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"asset_ids\": [\"{{asset_id}}\"],\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"recurrence_threshold\": 5,\n  \"stale_minutes_threshold\": 180\n}"
+        },
+        "url": "{{baseUrl}}/alarms/rationalization-candidates"
+      }
+    },
+    {
+      "name": "10 - Priority Score",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"alarm_id\": \"{{alarm_id}}\"\n}"
+        },
+        "url": "{{baseUrl}}/alarms/priority-score"
+      }
+    },
+    {
+      "name": "11 - Operator Recommendations (trace headers)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "trace_id", "value": "{{trace_id}}" },
+          { "key": "x-client-id", "value": "{{x_client_id}}" },
+          { "key": "x-metadata-tag", "value": "{{x_metadata_tag}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"alarm_id\": \"{{alarm_id}}\",\n  \"include_related\": true,\n  \"include_asset_context\": true,\n  \"include_historical_pattern\": true\n}"
+        },
+        "url": "{{baseUrl}}/recommendations/operator-actions"
+      }
+    },
+    {
+      "name": "12 - Generate Calculation Code (sets calculation_id)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"calculation_type\": \"alarm_flood_index\",\n  \"filters\": {\n    \"unit\": \"Unit 3\",\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  }\n}"
+        },
+        "url": "{{baseUrl}}/calculation-code/generate"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "const body = pm.response.json();",
+              "pm.collectionVariables.set('calculation_id', body.calculation_id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "13 - Execute Calculation Code (trace headers)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "trace_id", "value": "{{trace_id}}" },
+          { "key": "x-client-id", "value": "{{x_client_id}}" },
+          { "key": "x-metadata-tag", "value": "{{x_metadata_tag}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"calculation_id\": \"{{calculation_id}}\",\n  \"filters\": {\n    \"unit\": \"Unit 3\",\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  }\n}"
+        },
+        "url": "{{baseUrl}}/calculation-code/execute"
+      }
+    },
+    {
+      "name": "14 - KPI Definitions",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/analytics/kpi-definitions"
+      }
+    }
+  ]
+}
+
+
+5) postman/chaining/Alarm-API-Chaining.postman_collection.json
+
+{
+  "info": {
+    "name": "Alarm API Simulator - Chaining Flows",
+    "description": "Postman collection with 10 multi-step API chaining scenarios aligned to docs/api_chaining_catalog.json.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "b51775c5-a9d9-4a98-8ec3-b2da3742f1f1"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{auth_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8000" },
+    { "key": "auth_token", "value": "demo-token" },
+    { "key": "trace_id", "value": "trace-chain-001" },
+    { "key": "x_client_id", "value": "postman-chain" },
+    { "key": "x_metadata_tag", "value": "chain-test" },
+    { "key": "start_time", "value": "2026-05-01T00:00:00Z" },
+    { "key": "end_time", "value": "2026-07-01T00:00:00Z" },
+    { "key": "asset_id", "value": "" },
+    { "key": "asset_id_2", "value": "" },
+    { "key": "asset_id_3", "value": "" },
+    { "key": "alarm_id", "value": "" },
+    { "key": "calculation_id", "value": "" },
+    { "key": "window_start", "value": "{{start_time}}" },
+    { "key": "window_end", "value": "{{end_time}}" }
+  ],
+  "item": [
+    {
+      "name": "CHAIN-01 Asset -> Summary -> Rationalization",
+      "item": [
+        {
+          "name": "1) Search Boiler Feed Pump 101",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/assets/search?query=Boiler%20Feed%20Pump%20101&limit=5"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.response.to.have.status(200);",
+                  "const body = pm.response.json();",
+                  "pm.expect(body.results.length).to.be.above(0);",
+                  "pm.collectionVariables.set('asset_id', body.results[0].asset_id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2) Alarm Summary",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "trace_id", "value": "{{trace_id}}" },
+              { "key": "x-client-id", "value": "{{x_client_id}}" },
+              { "key": "x-metadata-tag", "value": "{{x_metadata_tag}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asset_ids\": [\"{{asset_id}}\"],\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"severity\": [\"high\", \"critical\"],\n  \"group_by\": [\"alarm_name\"],\n  \"kpis\": [\"alarm_count\", \"recurring_rate\", \"avg_ack_delay\"]\n}"
+            },
+            "url": "{{baseUrl}}/alarms/summary"
+          }
+        },
+        {
+          "name": "3) Rationalization Candidates",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asset_ids\": [\"{{asset_id}}\"],\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"recurrence_threshold\": 5\n}"
+            },
+            "url": "{{baseUrl}}/alarms/rationalization-candidates"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CHAIN-02 Flood -> Alarms -> Summary",
+      "item": [
+        {
+          "name": "1) Flood Analysis Unit 2",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"unit\": \"Unit 2\",\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"threshold_count\": 10,\n  \"rolling_window_minutes\": 10\n}"
+            },
+            "url": "{{baseUrl}}/alarms/flood-analysis"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.response.to.have.status(200);",
+                  "const body = pm.response.json();",
+                  "const ws = body.flood_windows || [];",
+                  "if (ws.length > 0) {",
+                  "  pm.collectionVariables.set('window_start', ws[0].start);",
+                  "  pm.collectionVariables.set('window_end', ws[0].end);",
+                  "} else {",
+                  "  pm.collectionVariables.set('window_start', pm.collectionVariables.get('start_time'));",
+                  "  pm.collectionVariables.set('window_end', pm.collectionVariables.get('end_time'));",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2) Get Alarms for Window",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/alarms?unit=Unit%202&start_time={{window_start}}&end_time={{window_end}}&page=1&page_size=200"
+          }
+        },
+        {
+          "name": "3) Summary by Asset+Severity",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"unit\": \"Unit 2\",\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"group_by\": [\"asset_id\", \"asset_name\", \"severity\"],\n  \"kpis\": [\"alarm_count\"]\n}"
+            },
+            "url": "{{baseUrl}}/alarms/summary"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CHAIN-03 Root Cause + Recommendations",
+      "item": [
+        {
+          "name": "1) Search Compressor Assets",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/assets/search?query=compressor&limit=5"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.response.to.have.status(200);",
+                  "const r = pm.response.json().results || [];",
+                  "pm.expect(r.length).to.be.above(0);",
+                  "pm.collectionVariables.set('asset_id', r[0].asset_id);",
+                  "pm.collectionVariables.set('asset_id_2', (r[1] || r[0]).asset_id);",
+                  "pm.collectionVariables.set('asset_id_3', (r[2] || r[0]).asset_id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2) Correlation",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "trace_id", "value": "{{trace_id}}" },
+              { "key": "x-client-id", "value": "{{x_client_id}}" },
+              { "key": "x-metadata-tag", "value": "{{x_metadata_tag}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asset_ids\": [\"{{asset_id}}\", \"{{asset_id_2}}\", \"{{asset_id_3}}\"],\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"correlation_method\": \"cooccurrence\",\n  \"severity_threshold\": \"medium\",\n  \"min_support\": 1\n}"
+            },
+            "url": "{{baseUrl}}/alarms/correlation"
+          }
+        },
+        {
+          "name": "3) Get Latest Alarm on Asset",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/alarms?asset_id={{asset_id}}&page=1&page_size=1&sort_by=start_time&sort_order=desc"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.response.to.have.status(200);",
+                  "const rows = pm.response.json().data || [];",
+                  "if (rows.length > 0) pm.collectionVariables.set('alarm_id', rows[0].alarm_id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "4) Asset Metadata",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/assets/{{asset_id}}/metadata"
+          }
+        },
+        {
+          "name": "5) Operator Recommendations",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "trace_id", "value": "{{trace_id}}" },
+              { "key": "x-client-id", "value": "{{x_client_id}}" },
+              { "key": "x-metadata-tag", "value": "{{x_metadata_tag}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"alarm_id\": \"{{alarm_id}}\",\n  \"include_related\": true\n}"
+            },
+            "url": "{{baseUrl}}/recommendations/operator-actions"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CHAIN-04 Critical Density KPI -> Execute -> Summary",
+      "item": [
+        {
+          "name": "1) Generate Calculation",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"calculation_type\": \"critical_alarm_density\",\n  \"filters\": {\n    \"unit\": \"Unit 3\",\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  }\n}"
+            },
+            "url": "{{baseUrl}}/calculation-code/generate"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.response.to.have.status(200);",
+                  "pm.collectionVariables.set('calculation_id', pm.response.json().calculation_id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2) Execute Calculation",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "trace_id", "value": "{{trace_id}}" },
+              { "key": "x-client-id", "value": "{{x_client_id}}" },
+              { "key": "x-metadata-tag", "value": "{{x_metadata_tag}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"calculation_id\": \"{{calculation_id}}\",\n  \"filters\": {\n    \"unit\": \"Unit 3\",\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  }\n}"
+            },
+            "url": "{{baseUrl}}/calculation-code/execute"
+          }
+        },
+        {
+          "name": "3) Summary by Asset",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"unit\": \"Unit 3\",\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"group_by\": [\"asset_id\", \"asset_name\"],\n  \"kpis\": [\"alarm_count\", \"critical_count\"]\n}"
+            },
+            "url": "{{baseUrl}}/alarms/summary"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CHAIN-05 Asset Active -> Recommendation",
+      "item": [
+        {
+          "name": "1) Search Boiler Feed Pump 102",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/assets/search?query=Boiler%20Feed%20Pump%20102&limit=5"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.response.to.have.status(200);",
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set('asset_id', body.results[0].asset_id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2) Get Active Alarms",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/alarms?asset_id={{asset_id}}&status=active&page=1&page_size=20"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.response.to.have.status(200);",
+                  "const rows = pm.response.json().data || [];",
+                  "if (rows.length > 0) pm.collectionVariables.set('alarm_id', rows[0].alarm_id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3) Recommendations",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "trace_id", "value": "{{trace_id}}" },
+              { "key": "x-client-id", "value": "{{x_client_id}}" },
+              { "key": "x-metadata-tag", "value": "{{x_metadata_tag}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"alarm_id\": \"{{alarm_id}}\",\n  \"include_related\": true\n}"
+            },
+            "url": "{{baseUrl}}/recommendations/operator-actions"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CHAIN-06 Stale + Severity Context",
+      "item": [
+        {
+          "name": "1) Rationalization Candidates",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"site\": \"NorthPlant\",\n  \"unit\": \"Unit 1\",\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"stale_minutes_threshold\": 180,\n  \"recurrence_threshold\": 6\n}"
+            },
+            "url": "{{baseUrl}}/alarms/rationalization-candidates"
+          }
+        },
+        {
+          "name": "2) Summary by Severity",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"site\": \"NorthPlant\",\n  \"unit\": \"Unit 1\",\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"group_by\": [\"severity\"],\n  \"kpis\": [\"alarm_count\", \"suppression_candidate_rate\"]\n}"
+            },
+            "url": "{{baseUrl}}/alarms/summary"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CHAIN-07 Response Efficiency + Trend",
+      "item": [
+        {
+          "name": "1) Generate Efficiency Calc",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"calculation_type\": \"operator_response_efficiency\",\n  \"filters\": {\n    \"site\": \"SouthPlant\",\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  }\n}"
+            },
+            "url": "{{baseUrl}}/calculation-code/generate"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.response.to.have.status(200);",
+                  "pm.collectionVariables.set('calculation_id', pm.response.json().calculation_id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2) Execute Efficiency Calc",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "trace_id", "value": "{{trace_id}}" },
+              { "key": "x-client-id", "value": "{{x_client_id}}" },
+              { "key": "x-metadata-tag", "value": "{{x_metadata_tag}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"calculation_id\": \"{{calculation_id}}\",\n  \"filters\": {\n    \"site\": \"SouthPlant\",\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  }\n}"
+            },
+            "url": "{{baseUrl}}/calculation-code/execute"
+          }
+        },
+        {
+          "name": "3) Trends",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"site\": \"SouthPlant\",\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"bucket\": \"daily\",\n  \"metrics\": [\"avg_ack_delay\"]\n}"
+            },
+            "url": "{{baseUrl}}/alarms/trends"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CHAIN-08 Motor Correlation",
+      "item": [
+        {
+          "name": "1) Search Motor Assets Unit 5",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/assets/search?query=motor&unit=Unit%205&limit=5"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.response.to.have.status(200);",
+                  "const r = pm.response.json().results || [];",
+                  "pm.expect(r.length).to.be.above(0);",
+                  "pm.collectionVariables.set('asset_id', r[0].asset_id);",
+                  "pm.collectionVariables.set('asset_id_2', (r[1] || r[0]).asset_id);",
+                  "pm.collectionVariables.set('asset_id_3', (r[2] || r[0]).asset_id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2) Correlation",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "trace_id", "value": "{{trace_id}}" },
+              { "key": "x-client-id", "value": "{{x_client_id}}" },
+              { "key": "x-metadata-tag", "value": "{{x_metadata_tag}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asset_ids\": [\"{{asset_id}}\", \"{{asset_id_2}}\", \"{{asset_id_3}}\"],\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"severity_threshold\": \"high\",\n  \"correlation_method\": \"cooccurrence\",\n  \"min_support\": 1\n}"
+            },
+            "url": "{{baseUrl}}/alarms/correlation"
+          }
+        },
+        {
+          "name": "3) Summary Context",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"unit\": \"Unit 5\",\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"alarm_types\": [\"safety\", \"device\"],\n  \"group_by\": [\"asset_id\", \"alarm_name\"],\n  \"kpis\": [\"alarm_count\"]\n}"
+            },
+            "url": "{{baseUrl}}/alarms/summary"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CHAIN-09 East Active -> Priority -> Recommendation",
+      "item": [
+        {
+          "name": "1) Get EastRefinery Active Alarms",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/alarms?site=EastRefinery&status=active&page=1&page_size=50&sort_by=start_time&sort_order=desc"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.response.to.have.status(200);",
+                  "const rows = pm.response.json().data || [];",
+                  "pm.expect(rows.length).to.be.above(0);",
+                  "pm.collectionVariables.set('alarm_id', rows[0].alarm_id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2) Alarm Detail",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/alarms/{{alarm_id}}"
+          }
+        },
+        {
+          "name": "3) Priority Score",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"alarm_id\": \"{{alarm_id}}\"\n}"
+            },
+            "url": "{{baseUrl}}/alarms/priority-score"
+          }
+        },
+        {
+          "name": "4) Recommendations",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "trace_id", "value": "{{trace_id}}" },
+              { "key": "x-client-id", "value": "{{x_client_id}}" },
+              { "key": "x-metadata-tag", "value": "{{x_metadata_tag}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"alarm_id\": \"{{alarm_id}}\"\n}"
+            },
+            "url": "{{baseUrl}}/recommendations/operator-actions"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CHAIN-10 Nuisance KPI -> Execute -> Candidates",
+      "item": [
+        {
+          "name": "1) Generate Nuisance Calculation",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"calculation_type\": \"nuisance_alarm_score\",\n  \"filters\": {\n    \"unit\": \"Unit 4\",\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  }\n}"
+            },
+            "url": "{{baseUrl}}/calculation-code/generate"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.response.to.have.status(200);",
+                  "pm.collectionVariables.set('calculation_id', pm.response.json().calculation_id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2) Execute Nuisance Calculation",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "trace_id", "value": "{{trace_id}}" },
+              { "key": "x-client-id", "value": "{{x_client_id}}" },
+              { "key": "x-metadata-tag", "value": "{{x_metadata_tag}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"calculation_id\": \"{{calculation_id}}\",\n  \"filters\": {\n    \"unit\": \"Unit 4\",\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  }\n}"
+            },
+            "url": "{{baseUrl}}/calculation-code/execute"
+          }
+        },
+        {
+          "name": "3) Rationalization Candidates",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"unit\": \"Unit 4\",\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"recurrence_threshold\": 8\n}"
+            },
+            "url": "{{baseUrl}}/alarms/rationalization-candidates"
+          }
+        }
+      ]
+    }
+  ]
+}
+
+
+
+
+6) postman/scenarios/Alarm-API-Scenarios.postman_collection.json 
+
+{
+  "info": {
+    "name": "Alarm API Simulator E2E",
+    "description": "Postman collection for Alarm Management API Simulator with auth, trace headers, and chained variables.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "6f25f208-6f6f-4e31-9f11-5a3b7cc4f8f0"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{auth_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8000" },
+    { "key": "auth_token", "value": "demo-token" },
+    { "key": "trace_id", "value": "trace-postman-001" },
+    { "key": "x_client_id", "value": "postman-client" },
+    { "key": "x_metadata_tag", "value": "manual-test" },
+    { "key": "asset_name", "value": "Boiler Feed Pump 101" },
+    { "key": "asset_id", "value": "" },
+    { "key": "alarm_id", "value": "" },
+    { "key": "calculation_id", "value": "" },
+    { "key": "start_time", "value": "2026-05-01T00:00:00Z" },
+    { "key": "end_time", "value": "2026-07-01T00:00:00Z" }
+  ],
+  "item": [
+    {
+      "name": "00 - Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/health",
+        "auth": { "type": "noauth" }
+      }
+    },
+    {
+      "name": "01 - Search Asset (sets asset_id)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/assets/search?query={{asset_name}}&limit=10",
+          "host": ["{{baseUrl}}"],
+          "path": ["assets", "search"],
+          "query": [
+            { "key": "query", "value": "{{asset_name}}" },
+            { "key": "limit", "value": "10" }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "const body = pm.response.json();",
+              "pm.collectionVariables.set('asset_id', body.results[0].asset_id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Asset Metadata",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/assets/{{asset_id}}/metadata"
+      }
+    },
+    {
+      "name": "03 - Get Alarms (sets alarm_id)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/alarms?asset_id={{asset_id}}&page=1&page_size=50&sort_by=start_time&sort_order=desc",
+          "host": ["{{baseUrl}}"],
+          "path": ["alarms"],
+          "query": [
+            { "key": "asset_id", "value": "{{asset_id}}" },
+            { "key": "page", "value": "1" },
+            { "key": "page_size", "value": "50" },
+            { "key": "sort_by", "value": "start_time" },
+            { "key": "sort_order", "value": "desc" }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "const body = pm.response.json();",
+              "if (body.data && body.data.length > 0) { pm.collectionVariables.set('alarm_id', body.data[0].alarm_id); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Get Alarm by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/alarms/{{alarm_id}}"
+      }
+    },
+    {
+      "name": "05 - Alarm Summary (trace headers)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "trace_id", "value": "{{trace_id}}" },
+          { "key": "x-client-id", "value": "{{x_client_id}}" },
+          { "key": "x-metadata-tag", "value": "{{x_metadata_tag}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"asset_ids\": [\"{{asset_id}}\"],\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"severity\": [\"high\", \"critical\"],\n  \"group_by\": [\"alarm_name\"],\n  \"kpis\": [\"alarm_count\", \"recurring_rate\", \"avg_ack_delay\"]\n}"
+        },
+        "url": "{{baseUrl}}/alarms/summary"
+      }
+    },
+    {
+      "name": "06 - Alarm Trends",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"asset_ids\": [\"{{asset_id}}\"],\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"bucket\": \"daily\",\n  \"metrics\": [\"alarm_count\", \"avg_ack_delay\"]\n}"
+        },
+        "url": "{{baseUrl}}/alarms/trends"
+      }
+    },
+    {
+      "name": "07 - Alarm Correlation (trace headers)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "trace_id", "value": "{{trace_id}}" },
+          { "key": "x-client-id", "value": "{{x_client_id}}" },
+          { "key": "x-metadata-tag", "value": "{{x_metadata_tag}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"asset_ids\": [\"{{asset_id}}\"],\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"correlation_method\": \"cooccurrence\",\n  \"lag_window_minutes\": 15,\n  \"severity_threshold\": \"medium\",\n  \"min_support\": 1\n}"
+        },
+        "url": "{{baseUrl}}/alarms/correlation"
+      }
+    },
+    {
+      "name": "08 - Flood Analysis",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"unit\": \"Unit 2\",\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"threshold_count\": 10,\n  \"rolling_window_minutes\": 10\n}"
+        },
+        "url": "{{baseUrl}}/alarms/flood-analysis"
+      }
+    },
+    {
+      "name": "09 - Rationalization Candidates",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"asset_ids\": [\"{{asset_id}}\"],\n  \"time_range\": {\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  },\n  \"recurrence_threshold\": 5,\n  \"stale_minutes_threshold\": 180\n}"
+        },
+        "url": "{{baseUrl}}/alarms/rationalization-candidates"
+      }
+    },
+    {
+      "name": "10 - Priority Score",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"alarm_id\": \"{{alarm_id}}\"\n}"
+        },
+        "url": "{{baseUrl}}/alarms/priority-score"
+      }
+    },
+    {
+      "name": "11 - Operator Recommendations (trace headers)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "trace_id", "value": "{{trace_id}}" },
+          { "key": "x-client-id", "value": "{{x_client_id}}" },
+          { "key": "x-metadata-tag", "value": "{{x_metadata_tag}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"alarm_id\": \"{{alarm_id}}\",\n  \"include_related\": true,\n  \"include_asset_context\": true,\n  \"include_historical_pattern\": true\n}"
+        },
+        "url": "{{baseUrl}}/recommendations/operator-actions"
+      }
+    },
+    {
+      "name": "12 - Generate Calculation Code (sets calculation_id)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"calculation_type\": \"alarm_flood_index\",\n  \"filters\": {\n    \"unit\": \"Unit 3\",\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  }\n}"
+        },
+        "url": "{{baseUrl}}/calculation-code/generate"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "const body = pm.response.json();",
+              "pm.collectionVariables.set('calculation_id', body.calculation_id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "13 - Execute Calculation Code (trace headers)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "trace_id", "value": "{{trace_id}}" },
+          { "key": "x-client-id", "value": "{{x_client_id}}" },
+          { "key": "x-metadata-tag", "value": "{{x_metadata_tag}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"calculation_id\": \"{{calculation_id}}\",\n  \"filters\": {\n    \"unit\": \"Unit 3\",\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\"\n  }\n}"
+        },
+        "url": "{{baseUrl}}/calculation-code/execute"
+      }
+    },
+    {
+      "name": "14 - KPI Definitions",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/analytics/kpi-definitions"
+      }
+    }
+  ]
+}
+
+
+7) how to solve this assignment, can you check and review and verify given all details and you can write end to end python code and you can also guide me step by step
+
+8) you can also check and review and understand and verify folder structure what i got it:
+(.rak1venv) PS C:\Users\13016698\Documents\Project\test-123-A\Alarm-Investigation-and-Procedure-Guidance> ls
+
+
+    Directory: C:\Users\13016698\Documents\Project\test-123-A\Alarm-Investigation-and-Procedure-Guidance
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+d-----         10/3/2026   1:51 AM                postman                                                                                          
+-a----         9/27/2026   2:48 AM          10824 Assignment_Use_Case.md                                                                           
+-a----         9/27/2026   2:48 AM           2437 README.md                                                                                        
+-a----         9/27/2026   2:48 AM          11500 Submission_and_Evaluation_Guidelines.md                                                          
+
+
+(.rak1venv) PS C:\Users\13016698\Documents\Project\test-123-A\Alarm-Investigation-and-Procedure-Guidance> cd postman\
+(.rak1venv) PS C:\Users\13016698\Documents\Project\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman> ls
+
+
+    Directory: C:\Users\13016698\Documents\Project\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+d-----         10/3/2026   1:51 AM                chaining                                                                                         
+d-----         10/3/2026   1:51 AM                scenarios                                                                                        
+-a----         9/27/2026   2:48 AM           9941 Alarm-API-Simulator.postman_collection.json                                                      
+
+
+(.rak1venv) PS C:\Users\13016698\Documents\Project\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman> cd chaining\
+(.rak1venv) PS C:\Users\13016698\Documents\Project\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman\chaining> ls
+
+
+    Directory: C:\Users\13016698\Documents\Project\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman\chaining
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+-a----         9/27/2026   2:48 AM          25068 Alarm-API-Chaining.postman_collection.json                                                       
+
+
+(.rak1venv) PS C:\Users\13016698\Documents\Project\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman\chaining> cd ..
+(.rak1venv) PS C:\Users\13016698\Documents\Project\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman> cd scenarios\
+(.rak1venv) PS C:\Users\13016698\Documents\Project\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman\scenarios> ls
+
+
+    Directory: C:\Users\13016698\Documents\Project\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman\scenarios
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+-a----         9/27/2026   2:48 AM           9941 Alarm-API-Scenarios.postman_collection.json                                                      
+
+
+(.rak1venv) PS C:\Users\13016698\Documents\Project\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman\scenarios> 

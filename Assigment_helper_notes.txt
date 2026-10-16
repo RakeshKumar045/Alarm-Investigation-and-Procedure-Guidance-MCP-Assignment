@@ -1,0 +1,253 @@
+
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance> ls
+
+
+    Directory: assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+d-----         10/5/2026  10:23 PM                .pytest_cache                                                                                    
+d-----         10/5/2026   9:49 PM                .venv                                                                                            
+d-----         10/6/2026   2:52 AM                alarm_api                                                                                        
+d-----         10/5/2026  10:10 PM                apps                                                                                             
+d-----         10/6/2026   1:27 AM                connectors                                                                                       
+d-----         10/5/2026   9:45 PM                docs                                                                                             
+d-----         10/5/2026  10:07 PM                mcp_servers                                                                                      
+d-----         10/3/2026   1:51 AM                postman                                                                                          
+d-----         10/6/2026  12:54 AM                rag                                                                                              
+d-----         10/5/2026   9:45 PM                tests                                                                                            
+-a----         10/6/2026   1:13 AM            214 .env                                                                                             
+-a----         10/5/2026   9:52 PM            214 .env.example                                                                                     
+-a----         10/5/2026   9:54 PM             88 .gitignore                                                                                       
+-a----         9/27/2026   2:48 AM          10824 Assignment_Use_Case.md                                                                           
+-a----         10/6/2026   1:59 AM           1006 docker-compose.yml                                                                               
+-a----         10/5/2026  10:25 PM            183 Dockerfile                                                                                       
+-a----         10/6/2026  12:53 AM             92 pytest.ini                                                                                       
+-a----         10/5/2026  10:26 PM           1190 README.md                                                                                        
+-a----         10/6/2026   2:31 AM            246 requirements.txt                                                                                 
+-a----         9/27/2026   2:48 AM          11500 Submission_and_Evaluation_Guidelines.md                                                          
+
+
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance> cd .\alarm_api\
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\alarm_api> ls
+
+
+    Directory: assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\alarm_api
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+d-----         10/6/2026  12:54 AM                __pycache__                                                                                      
+-a----         10/5/2026   9:54 PM           3184 data.py                                                                                          
+-a----         10/6/2026   2:52 AM          11722 main.py                                                                                          
+-a----         10/6/2026  12:54 AM              0 __init__.py                                                                                      
+
+
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\alarm_api> cd ..
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance> cd .\apps\backend 
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\apps\backend> ls
+
+
+    Directory: assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\apps\backend
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+d-----         10/6/2026   1:43 AM                __pycache__                                                                                      
+-a----         10/5/2026  10:10 PM            674 main.py                                                                                          
+-a----         10/6/2026   1:43 AM           8616 orchestrator.py                                                                                  
+-a----         10/6/2026  12:54 AM              0 __init__.py                                                                                      
+
+
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\apps\backend> cd ..
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\apps> cd .\frontend\
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\apps\frontend> ls
+
+
+    Directory: assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\apps\frontend
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+-a----         10/6/2026   2:34 AM          19540 app.py                                                                                           
+
+
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\apps\frontend> cd ..
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\apps> ls
+
+
+    Directory: assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\apps
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+d-----         10/6/2026   1:43 AM                backend                                                                                          
+d-----         10/6/2026   2:34 AM                frontend                                                                                         
+d-----         10/6/2026  12:54 AM                __pycache__                                                                                      
+-a----         10/6/2026  12:54 AM              0 __init__.py                                                                                      
+
+
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\apps> cd ..
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance> cd .\connectors\
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\connectors> ls
+
+
+    Directory: assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\connectors
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+d-----         10/6/2026   1:27 AM                __pycache__                                                                                      
+-a----         10/5/2026   9:59 PM           4230 alarm_api_client.py                                                                              
+-a----         10/6/2026  12:54 AM              0 __init__.py                                                                                      
+
+
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\connectors> cd ..
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance> cd .\mcp_servers\
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\mcp_servers> ls
+
+
+    Directory: assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\mcp_servers
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+d-----         10/6/2026   1:58 AM                alarm_management                                                                                 
+d-----         10/6/2026  12:57 AM                __pycache__                                                                                      
+-a----         10/6/2026  12:54 AM              0 __init__.py                                                                                      
+
+
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\mcp_servers> cd .\alarm_management\
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\mcp_servers\alarm_management> ls
+
+
+    Directory: assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\mcp_servers\alarm_management
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+d-----         10/6/2026   1:26 AM                __pycache__                                                                                      
+-a----         10/6/2026   1:58 AM           3748 server.py                                                                                        
+-a----         10/6/2026  12:54 AM              0 __init__.py                                                                                      
+
+
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\mcp_servers\alarm_management> cd ..
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\mcp_servers> cd ..
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance> cd .\postman\
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman> ls
+
+
+    Directory: assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+d-----         10/3/2026   1:51 AM                chaining                                                                                         
+d-----         10/3/2026   1:51 AM                scenarios                                                                                        
+-a----         9/27/2026   2:48 AM           9941 Alarm-API-Simulator.postman_collection.json                                                      
+
+
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman> cd .\chaining\
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman\chaining> ls
+
+
+    Directory: assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman\chaining
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+-a----         9/27/2026   2:48 AM          25068 Alarm-API-Chaining.postman_collection.json                                                       
+
+
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman\chaining> cd ..
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman> cd .\scenarios\
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman\scenarios> ls
+
+
+    Directory: assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman\scenarios
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+-a----         9/27/2026   2:48 AM           9941 Alarm-API-Scenarios.postman_collection.json                                                      
+
+
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman\scenarios> cd ..
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\postman> cd ..
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance> cd .\rag\
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\rag> ls
+
+
+    Directory: assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\rag
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+d-----         10/5/2026  10:05 PM                documents                                                                                        
+d-----         10/6/2026  12:54 AM                __pycache__                                                                                      
+-a----         10/5/2026  10:06 PM           3479 retrieval.py                                                                                     
+-a----         10/6/2026  12:54 AM              0 __init__.py                                                                                      
+
+
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\rag> cd .\documents\
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\rag\documents> ls
+
+
+    Directory: assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\rag\documents
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+-a----         10/5/2026  10:04 PM            878 boiler_feed_pump_procedure.md                                                                    
+-a----         10/5/2026  10:05 PM            462 pump_maintenance_manual.md                                                                       
+
+
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\rag\documents> cd ..
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\rag> cd ..
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance> cd .\tests\
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\tests> ls
+
+
+    Directory: assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\tests
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+d-----         10/5/2026   9:45 PM                e2e                                                                                              
+d-----         10/6/2026   1:14 AM                integration                                                                                      
+d-----         10/5/2026  10:23 PM                unit                                                                                             
+
+
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\tests> cd .\integration\
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\tests\integration> ls
+
+
+    Directory: assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\tests\integration
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+d-----         10/6/2026   1:28 AM                __pycache__                                                                                      
+-a----         10/5/2026  10:22 PM            745 test_api.py                                                                                      
+-a----         10/5/2026  10:23 PM            858 test_chaining.py                                                                                 
+-a----         10/6/2026   1:14 AM            736 test_mcp_connection.py                                                                           
+
+
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\tests\integration> cd ..
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\tests> cd .\unit\
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\tests\unit> ls
+
+
+    Directory: assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\tests\unit
+
+
+Mode                 LastWriteTime         Length Name                                                                                             
+----                 -------------         ------ ----                                                                                             
+d-----         10/5/2026  10:23 PM                __pycache__                                                                                      
+-a----         10/5/2026  10:22 PM            608 test_rag.py                                                                                      
+
+
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\tests\unit> cd ..
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance\tests> cd ..
+(.venv) PS assignment\test-123-A\Alarm-Investigation-and-Procedure-Guidance>

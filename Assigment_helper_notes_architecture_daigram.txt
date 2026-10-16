@@ -1,0 +1,745 @@
+
+
+
+https://veolia.chat/chat/091fe275-09a1-49cd-b650-a47dff546b0b
+
+Alarm-Investigation-and-Procedure-Guidance/
+├── Assignment_Use_Case.md
+├── README.md
+├── Submission_and_Evaluation_Guidelines.md
+└── postman/
+    ├── Alarm-API-Simulator.postman_collection.json
+    ├── chaining/
+    │   └── Alarm-API-Chaining.postman_collection.json
+    └── scenarios/
+        └── Alarm-API-Scenarios.postman_collection.json
+
+
+***********************************************************
+
+User question
+    ↓
+Asset search through MCP
+    ↓
+Alarm retrieval through MCP
+    ↓
+Asset metadata through MCP
+    ↓
+Priority/recommendation through MCP
+    ↓
+Procedure/manual retrieval through RAG
+    ↓
+Combined grounded response
+    ↓
+GUI with citations and tool trace
+
+
+-------------------------------------------------
+
+Important observations
+Alarm-API-Scenarios.postman_collection.json is effectively a duplicate of the main collection.
+The Postman collections define endpoint requests, but they do not completely define every response schema.
+You must create your own simulator backend. There is no existing backend.
+The copilot must call the Alarm API through MCP.
+The copilot must not call the simulator API directly.
+RAG and MCP must participate in the same workflow.
+The minimum credible implementation should focus on this vertical slice:
+
+
+
+
+┌─────────────────────┐
+│ Streamlit GUI       │
+└──────────┬──────────┘
+           │ HTTP
+┌──────────▼──────────┐
+│ Copilot Backend     │
+│ Orchestrator        │
+└──────────┬──────────┘
+           │ MCP client
+┌──────────▼──────────┐
+│ Alarm MCP Server    │
+│ FastMCP tools       │
+└──────────┬──────────┘
+           │ REST + auth + trace headers
+┌──────────▼──────────┐
+│ Alarm API Simulator │
+│ FastAPI              │
+└─────────────────────┘
+
+┌─────────────────────┐
+│ RAG ingestion       │
+│ Markdown documents  │
+└──────────┬──────────┘
+           │
+┌──────────▼──────────┐
+│ TF-IDF retrieval    │
+│ citations           │
+└─────────────────────┘
+
+--------------------------------
+
+
+Area	Technology
+API simulator	FastAPI
+MCP server	Python MCP SDK / FastMCP
+MCP client	Python MCP SDK
+Orchestration API	FastAPI
+GUI	Streamlit
+RAG	scikit-learn TF-IDF
+Models	Pydantic
+HTTP client	httpx
+Tests	pytest
+Packaging	Docker Compose
+
+You do not need an external LLM to demonstrate the architecture. A deterministic grounded answer generator is acceptable for a simulator assignment, provided you clearly document it. You can later add OpenAI, Azure OpenAI, Ollama, or another provider.
+
+
+---------------------------------------------------
+
+3. Target repository structure
+
+
+Alarm-Investigation-and-Procedure-Guidance/
+├── README.md
+├── Assignment_Use_Case.md
+├── Submission_and_Evaluation_Guidelines.md
+├── .env.example
+├── .gitignore
+├── requirements.txt
+├── Dockerfile
+├── docker-compose.yml
+├── Makefile
+│
+├── apps/
+│   ├── backend/
+│   │   ├── __init__.py
+│   │   ├── main.py
+│   │   └── orchestrator.py
+│   └── frontend/
+│       └── app.py
+│
+├── alarm_api/
+│   ├── __init__.py
+│   ├── main.py
+│   └── data.py
+│
+├── mcp_servers/
+│   └── alarm_management/
+│       ├── __init__.py
+│       └── server.py
+│
+├── rag/
+│   ├── __init__.py
+│   ├── ingestion.py
+│   ├── retrieval.py
+│   └── documents/
+│       ├── boiler_feed_pump_procedure.md
+│       ├── pump_maintenance_manual.md
+│       └── alarm_response_safety.md
+│
+├── connectors/
+│   ├── __init__.py
+│   └── alarm_api_client.py
+│
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   └── e2e/
+│
+└── docs/
+    ├── architecture.md
+    ├── mcp-tool-catalog.md
+    ├── rag-design.md
+    ├── api-integration.md
+    ├── design-decisions.md
+    └── known-limitations.md
+
+
+***********************************************************************************
+
+
+
+
+ModuleNotFoundError: No module named 'alarm_api'
+ModuleNotFoundError: No module named 'rag'
+solution : Create pytest.ini in the project root:
+
+
+
+
+------------------------------------------------------------------------------------
+
+
+
+6. Build the Alarm API simulator first
+Create alarm_api/data.py:
+
+Create alarm_api/main.py:
+
+
+
+
+
+
+1)
+(.venv) PS C:\Users\13016698\Documents\Project\test-123-A\Alarm-Investigation-and-Procedure-Guidance> python -m uvicorn alarm_api.main:app --reload --port 8000
+
+python -m uvicorn alarm_api.main:app --reload --port 8000
+
+
+
+curl http://127.0.0.1:8000/health
+
+Invoke-WebRequest -Headers @{"Authorization" = "Bearer demo-token"} -Uri "http://127.0.0.1:8000/assets/search?query=Boiler Feed Pump 101"
+
+
+
+
+B)  API 
+
+POST /alarms/trends
+POST /alarms/flood-analysis
+POST /alarms/rationalization-candidates
+POST /calculation-code/generate
+POST /calculation-code/execute
+GET  /analytics/kpi-definitions
+
+
+
+
+#############################################################################################
+
+7. Build the API connector
+
+Create connectors/alarm_api_client.py:
+
+
+
+This connector implements:
+
+Bearer authentication
+Trace propagation
+Client identification
+Timeout handling
+Retry handling
+Error mapping
+Pagination parameters
+
+----------------------------
+
+8. Build the RAG workflow
+Create sample document rag/documents/boiler_feed_pump_procedure.md:
+
+Create rag/documents/pump_maintenance_manual.md:
+
+Create rag/retrieval.py:
+
+Important RAG security rule: retrieved documents are evidence, not instructions. Your prompt or answer generator must treat document content as untrusted data.
+
+
+-------------------------------------------------------------
+
+9. Build the MCP server
+
+Create mcp_servers/alarm_management/server.py:
+
+
+
+
+
+python -m mcp_servers.alarm_management.server
+
+
+Expected MCP URL:  http://127.0.0.1:9000/mcp
+
+
+
+
+
+The exact port behavior can vary slightly by MCP SDK version. If necessary, configure the port through the FastMCP server settings or run the server using the SDK’s documented HTTP transport options.
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+10. Build the orchestration workflow
+
+The orchestrator must:
+
+Discover MCP tools.
+Call asset_search.
+Pass the returned asset ID to alarm_retrieval.
+Use the returned alarm ID for priority and recommendations.
+Use the asset ID for metadata.
+Query RAG using alarm name and likely causes.
+Produce citations.
+Return the MCP trace.
+
+
+
+
+Create apps/backend/orchestrator.py:
+
+This demonstrates genuine multi-step chaining through MCP.
+
+
+################################################################
+
+11. Expose the orchestration backend
+
+Create apps/backend/main.py:
+
+
+python -m uvicorn apps.backend.main:app --reload --port 8080
+
+
+
+
+
+------------------------------------------
+
+12. Build the GUI
+
+Create apps/frontend/app.py:
+
+
+python -m streamlit run apps/frontend/app.py
+
+
+open url :  http://localhost:8501
+
+
+--------------------------------------------------------------------------
+
+13. Startup order
+Use separate PowerShell terminals.
+
+Terminal 1: Alarm API simulator
+python -m uvicorn alarm_api.main:app --reload --port 8000
+
+
+Terminal 2: MCP server
+python -m mcp_servers.alarm_management.server
+
+
+Terminal 3: Copilot backend
+python -m uvicorn apps.backend.main:app --reload --port 8080
+
+
+Terminal 4: GUI
+python -m streamlit run apps/frontend/app.py
+
+
+Then ask:
+Investigate active alarms for Boiler Feed Pump 101 and recommend immediate actions.
+
+
+Expected chain:
+asset_search
+asset_metadata
+alarm_retrieval
+alarm_priority_score
+operator_recommendations
+alarm_correlation
+RAG retrieval
+
+
+-------------------------------------------------------------------
+
+14. Complete the remaining required simulator endpoints
+After the first vertical slice works, implement these endpoints:
+
+POST /alarms/summary
+POST /alarms/trends
+POST /alarms/flood-analysis
+POST /alarms/rationalization-candidates
+POST /calculation-code/generate
+POST /calculation-code/execute
+GET  /analytics/kpi-definitions
+
+a)
+Recommended response shapes:
+
+{
+  "trace_id": "trace-123",
+  "groups": [
+    {
+      "alarm_name": "Pump Discharge Pressure Low",
+      "alarm_count": 18,
+      "recurring_rate": 18.0,
+      "avg_ack_delay": 4.0
+    }
+  ],
+  "total_alarm_count": 18
+}
+
+
+b)
+{
+  "trace_id": "trace-123",
+  "points": [
+    {
+      "bucket": "2026-06-28",
+      "alarm_count": 3,
+      "avg_ack_delay": 4.2
+    }
+  ]
+}
+
+
+
+c)
+{
+  "flood_windows": [
+    {
+      "start": "2026-06-28T10:00:00Z",
+      "end": "2026-06-28T10:10:00Z",
+      "alarm_count": 12
+    }
+  ]
+}
+
+
+
+
+
+------------------------------------------------------------------------------
+15. Tests you should implement
+
+Create tests/unit/test_rag.py
+
+Create tests/integration/test_api.py:
+
+Create tests/integration/test_chaining.py:
+
+
+Add a simple MCP discovery test    :   ->     Create:     tests/integration/test_mcp_connection.py
+
+
+
+##################################################################################
+
+16. Docker Compose
+
+Create docker-compose.yml:
+
+Create Dockerfile:
+
+Start:
+docker compose up --build
+
+
+One caveat: MCP HTTP transport configuration can vary by SDK release. Validate the MCP server URL using the SDK version installed in your environment.
+
+
+
+------------------------------------------------------------
+
+17. Required documentation
+Your root README.md should be rewritten to contain:
+
+
+Test
+pytest -q
+
+python -m pytest -q
+
+python -m pytest
+
+
+
+
+
+Example question
+Investigate active alarms for Boiler Feed Pump 101 and recommend immediate actions.
+
+
+
+
+
+Known limitations
+Simulator data is synthetic.
+TF-IDF is used instead of a production embedding model.
+No write operations are exposed.
+LLM generation is deterministic in the demonstration version.
+MCP transport configuration may require adjustment for SDK versions.
+
+
+----------------------------------------------------------------------------------------
+
+
+Also create:
+
+- `docs/architecture.md`
+- `docs/mcp-tool-catalog.md`
+- `docs/rag-design.md`
+- `docs/api-integration.md`
+- `docs/known-limitations.md`
+
+---
+
+# 18. Acceptance checklist
+
+Before submitting, verify every item:
+
+## API simulator
+
+- [ ] `/health`
+- [ ] Authentication
+- [ ] Asset search
+- [ ] Asset metadata
+- [ ] Alarm retrieval
+- [ ] Pagination
+- [ ] Alarm summary
+- [ ] Trends
+- [ ] Correlation
+- [ ] Flood analysis
+- [ ] Rationalization
+- [ ] Priority score
+- [ ] Operator recommendations
+- [ ] Trace headers
+- [ ] Calculation endpoints
+- [ ] KPI definitions
+
+## MCP
+
+- [ ] MCP server starts independently
+- [ ] Tool discovery works
+- [ ] Typed tool arguments exist
+- [ ] Input validation exists
+- [ ] Authentication is propagated
+- [ ] Trace IDs are propagated
+- [ ] Timeout is implemented
+- [ ] Retry is implemented
+- [ ] API errors are mapped
+- [ ] Secrets are not logged
+- [ ] MCP tools are visible in the GUI
+
+## RAG
+
+- [ ] Documents exist
+- [ ] Ingestion works
+- [ ] Chunk metadata exists
+- [ ] Retrieval works
+- [ ] Low-confidence/no-result behavior exists
+- [ ] Citations are displayed
+- [ ] Retrieved content is treated as untrusted data
+- [ ] RAG participates in the same MCP workflow
+
+## Tests
+
+- [ ] API tests
+- [ ] MCP tool tests
+- [ ] MCP client tests
+- [ ] RAG tests
+- [ ] Orchestrator tests
+- [ ] Failure-path tests
+- [ ] End-to-end MCP-plus-RAG test
+
+## Submission
+
+- [ ] README
+- [ ] Architecture diagram
+- [ ] MCP catalog
+- [ ] RAG design
+- [ ] `.env.example`
+- [ ] Dockerfile
+- [ ] Docker Compose
+- [ ] CI workflow
+- [ ] Screenshots
+- [ ] Demo video up to 10 minutes
+- [ ] Known limitations
+
+---
+
+# 19. Recommended development order
+
+Do not implement everything at once. Use this sequence:
+
+### Phase 1 — Simulator
+
+```text
+health
+asset search
+metadata
+alarms
+priority
+recommendations
+
+
+
+###############################################################################
+
+
+Phase 2 — MCP
+MCP tools
+tool discovery
+API connector
+authentication
+retry/timeout
+
+content_copy
+Phase 3 — RAG
+sample documents
+ingestion
+chunking
+TF-IDF retrieval
+citations
+
+content_copy
+Phase 4 — Orchestration
+asset_search
+alarm_retrieval
+metadata
+priority
+recommendations
+RAG query
+combined answer
+trace
+
+content_copy
+Phase 5 — GUI
+chat input
+answer
+alarm panel
+recommendation panel
+citations
+MCP trace
+errors
+
+content_copy
+Phase 6 — Quality
+remaining API endpoints
+tests
+Docker
+documentation
+screenshots
+demo video
+
+content_copy
+The most important thing is to get one complete scenario working first:
+
+"Investigate active alarms for Boiler Feed Pump 101 and recommend immediate actions."
+
+content_copy
+That scenario should visibly demonstrate:
+
+Natural language
+→ MCP discovery
+→ asset search
+→ alarm retrieval
+→ asset metadata
+→ priority
+→ recommendations
+→ RAG retrieval
+→ grounded answer
+→ citations
+→ tool trace
+
+
+
+
+
+------------------------------------------------------------
+1) 
+alarm, recommendations, citations, and trace.
+
+$body = @{
+    question = "Investigate active alarms for Boiler Feed Pump 101 and recommend immediate actions."
+} | ConvertTo-Json
+
+Invoke-RestMethod `
+  -Uri "http://127.0.0.1:8080/chat" `
+  -Method Post `
+  -ContentType "application/json" `
+  -Body $body
+
+
+
+
+-------------------------------------------------
+1) start docker desktop by search windows search in laptop
+
+2)
+docker compose down
+docker compose up --build
+
+
+--------------------------------------------------  query
+
+1) 
+Investigate active alarms for Boiler Feed Pump 101 and recommend immediate actions.
+
+1. Boiler Feed Pump 102
+Show active critical alarms for Boiler Feed Pump 102 and recommend immediate actions.
+
+
+
+2. Compressor
+Investigate active alarms for Compressor 201 and identify likely causes.
+
+
+3. Unknown asset
+Investigate active alarms for Unknown Pump 999.
+
+
+Expected:
+No matching asset was found.
+
+4. General pump search
+Which pump has the most urgent active alarm?
+
+content_copy
+5. Procedure-focused query
+Which operating procedure applies to the Boiler Feed Pump 101 low flow alarm?
+
+
+
+6. Maintenance-focused query
+What maintenance checks should be performed for recurring low flow on Boiler Feed Pump 101?
+
+content_copy
+7. Motor-related query
+Investigate Motor 101 alarms and identify related assets.
+
+content_copy
+8. Safety-focused query
+What safety precautions apply when investigating the Boiler Feed Pump 101 low flow alarm?
+
+content_copy
+9. Empty input
+Submit an empty question.
+
+Expected:
+
+Please enter an investigation question.
+
+content_copy
+10. Unsupported asset
+Investigate alarms for Turbine 500.
+
+content_copy
+Expected:
+
+No matching asset was found.
+
+content_copy
+For your demo, use these three:
+
+Successful:
+Investigate active alarms for Boiler Feed Pump 101 and recommend immediate actions.
+
+content_copy
+Different asset:
+Investigate active alarms for Compressor 201 and identify likely causes.
+
+content_copy
+Failure/degraded scenario:
+Investigate active alarms for Unknown Pump 999.
+
+
+
+
+

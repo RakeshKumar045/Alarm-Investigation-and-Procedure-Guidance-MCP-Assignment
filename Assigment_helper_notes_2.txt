@@ -1,0 +1,303 @@
+1) 
+
+The MCP server calls the Alarm API simulator through the API connector.
+The copilot backend does not call the Alarm API directly.
+
+Common behavior
+All tools support:
+
+Typed input arguments
+Input validation
+Bearer authentication propagation
+Trace metadata propagation
+Timeout handling
+Retry handling
+External API error mapping
+Structured results
+Safe error messages without secrets
+1. asset_search
+Purpose
+Search for assets by name or description.
+
+Input schema
+{
+  "query": "Boiler Feed Pump 101",
+  "limit": 10
+}
+
+content_copy
+Output example
+{
+  "results": [
+    {
+      "asset_id": "asset-bfp-101",
+      "asset_name": "Boiler Feed Pump 101",
+      "site": "NorthPlant",
+      "unit": "Unit 1",
+      "asset_type": "pump"
+    }
+  ],
+  "count": 1
+}
+
+content_copy
+Underlying API
+GET /assets/search
+
+content_copy
+Authentication
+The MCP server sends:
+
+Authorization: Bearer <configured-token>
+
+content_copy
+Error behavior
+Empty query: validation error
+Invalid limit: validation error
+Invalid token: authentication error
+API unavailable: service-unavailable error
+2. asset_metadata
+Purpose
+Retrieve asset metadata and related assets.
+
+Input schema
+{
+  "asset_id": "asset-bfp-101"
+}
+
+content_copy
+Output example
+{
+  "asset": {
+    "asset_id": "asset-bfp-101",
+    "asset_name": "Boiler Feed Pump 101",
+    "site": "NorthPlant",
+    "unit": "Unit 1",
+    "asset_type": "pump"
+  },
+  "related_assets": [
+    {
+      "asset_id": "asset-motor-101",
+      "asset_name": "Motor 101",
+      "asset_type": "motor"
+    }
+  ]
+}
+
+content_copy
+Underlying API
+GET /assets/{asset_id}/metadata
+
+content_copy
+Error behavior
+Empty asset ID: validation error
+Unknown asset: not-found error
+API timeout: timeout error
+3. alarm_retrieval
+Purpose
+Retrieve active or historical alarms for an asset.
+
+Input schema
+{
+  "asset_id": "asset-bfp-101",
+  "status": "active",
+  "page": 1,
+  "page_size": 50
+}
+
+content_copy
+Output example
+{
+  "data": [
+    {
+      "alarm_id": "alarm-bfp101-low-flow-001",
+      "asset_id": "asset-bfp-101",
+      "alarm_name": "Boiler Feed Pump Low Flow",
+      "severity": "critical",
+      "status": "active",
+      "occurrence_count": 12
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "page_size": 50,
+    "total": 1,
+    "has_next": false
+  }
+}
+
+content_copy
+Underlying API
+GET /alarms
+
+content_copy
+Error behavior
+Invalid page or page size: validation error
+Unknown asset: empty result
+API unavailable: mapped service error
+4. alarm_priority_score
+Purpose
+Calculate the priority of a specific alarm.
+
+Input schema
+{
+  "alarm_id": "alarm-bfp101-low-flow-001"
+}
+
+content_copy
+Output example
+{
+  "alarm_id": "alarm-bfp101-low-flow-001",
+  "priority_score": 100,
+  "priority": "urgent",
+  "reason": "Severity and recurrence frequency"
+}
+
+content_copy
+Underlying API
+POST /alarms/priority-score
+
+content_copy
+Error behavior
+Empty alarm ID: validation error
+Unknown alarm: not-found error
+API failure: mapped MCP error
+5. operator_recommendations
+Purpose
+Retrieve likely causes, immediate actions, and safety guidance.
+
+Input schema
+{
+  "alarm_id": "alarm-bfp101-low-flow-001"
+}
+
+content_copy
+Output example
+{
+  "alarm_id": "alarm-bfp101-low-flow-001",
+  "likely_causes": [
+    "Insufficient suction flow",
+    "Blocked suction strainer",
+    "Instrument error"
+  ],
+  "recommended_actions": [
+    "Verify the local flow indication.",
+    "Check pump suction and discharge pressure.",
+    "Inspect valves and suction strainers."
+  ],
+  "safety_note": "Do not bypass interlocks."
+}
+
+content_copy
+Underlying API
+POST /recommendations/operator-actions
+
+content_copy
+Error behavior
+Empty alarm ID: validation error
+Unknown alarm: not-found error
+API timeout: timeout error
+6. alarm_correlation
+Purpose
+Correlate alarms across an asset and its related assets.
+
+Input schema
+{
+  "asset_ids": [
+    "asset-bfp-101",
+    "asset-motor-101"
+  ]
+}
+
+content_copy
+Output example
+{
+  "trace_id": "trace-123",
+  "correlations": [
+    {
+      "alarm_name": "Boiler Feed Pump Low Flow",
+      "asset_id": "asset-bfp-101",
+      "support": 12,
+      "confidence": 0.62,
+      "likely_factor": "Low suction flow or restriction"
+    }
+  ]
+}
+
+content_copy
+Underlying API
+POST /alarms/correlation
+
+content_copy
+Error behavior
+Empty asset list: validation error
+Unknown assets: empty correlation result
+API failure: mapped MCP error
+Multi-step tool chain
+The primary workflow invokes tools in this order:
+
+asset_search
+    |
+    v
+asset_metadata
+    |
+    v
+alarm_retrieval
+    |
+    v
+alarm_priority_score
+    |
+    v
+operator_recommendations
+    |
+    v
+alarm_correlation
+    |
+    v
+RAG retrieval and citations
+
+content_copy
+The output of one tool is passed into the next tool. For example:
+
+asset_search.results[0].asset_id
+    -> asset_metadata.asset_id
+    -> alarm_retrieval.asset_id
+
+content_copy
+Then:
+
+alarm_retrieval.data[0].alarm_id
+    -> alarm_priority_score.alarm_id
+    -> operator_recommendations.alarm_id
+
+content_copy
+Traceability
+The GUI displays:
+
+Tool name
+Tool arguments
+Success or failure status
+Execution duration
+Raw tool result where available
+
+
+
+-----------------------------------------------
+
+Get-Content .\README.md
+
+Get-Item .\docs\design-decisions.md
+
+
+
+
+---------------------------------------------------------
+
+01-successful-investigation.png — successful alarm investigation
+02-mcp-trace.png — MCP discovery and tool execution trace
+03-rag-citations.png — procedure and maintenance citations
+04-visualizations.png — operational visualizations
+05-unknown-asset.png — degraded/no-result scenario
+06-api-docs.png — backend API documentation
+07-docker-services.png — Docker Compose services
+architecture-diagram.png — system architecture diagram
